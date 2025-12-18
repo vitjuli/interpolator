@@ -3,8 +3,6 @@
 A production-ready, full-stack machine learning system for training and deploying neural networks on 5-dimensional regression tasks. Built with modern web technologies and containerized microservices architecture.
 
 **Author**: Iuliia Vituigova (iv294@cam.ac.uk)
-**Institution**: Cambridge University 
-**Year**: 2025
 
 ---
 
