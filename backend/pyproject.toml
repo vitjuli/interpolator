@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fivedreg"
 version = "0.1.0"
-description = "Neural network 5D regression package with FastAPI backend"
+description = "Neural network-based 5D regression package with FastAPI backend"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = Iuliia Vitiugova}
+    {name = "FiveDReg Team"}
 ]
 keywords = [
     "regression",
@@ -126,6 +126,12 @@ all = [
     "ipykernel>=6.25.0",
     "ipywidgets>=8.0.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/fivedreg/fivedreg"
+Documentation = "https://fivedreg.readthedocs.io"
+Repository = "https://github.com/fivedreg/fivedreg"
+Issues = "https://github.com/fivedreg/fivedreg/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

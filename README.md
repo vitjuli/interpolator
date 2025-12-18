@@ -584,7 +584,6 @@ open htmlcov/index.html  # macOS
 platform darwin -- Python 3.12.2, pytest-9.0.2, pluggy-1.6.0
 collected 74 items
 
-tests/test_backend_utils.py .......... (10 tests)                       [ 13%]
 tests/test_backend_utils_enhanced.py .................... (20 tests)    [ 40%]
 tests/test_core.py ....... (7 tests)                                    [ 50%]
 tests/test_coverage_completion.py .................... (20 tests)       [ 77%]
@@ -673,7 +672,6 @@ PYTHONPATH=. pytest tests/test_backend_utils.py -v
 - **test_empty_list_datasets_returns_list**: Tests list_datasets() returns empty list when no datasets
 - **test_empty_list_models_returns_list**: Tests list_models() returns empty list when no models
 
-**Coverage Impact**: These tests increased fivedreg/utils.py coverage from 42.86% to **100%**
 
 **How to Run**:
 ```bash
@@ -1173,7 +1171,7 @@ interpoletor/
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Backend Issues
 
