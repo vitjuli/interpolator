@@ -1,0 +1,48 @@
+services:
+  backend:
+    container_name: interpoletor-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data_uploads:/app/data_uploads
+      - ./backend/models:/app/models
+      - ./backend/figures:/app/figures
+    environment:
+      - ENV=prod
+      - WANDB_DISABLED=true
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - interpoletor-network
+    restart: unless-stopped
+
+  frontend:
+    container_name: interpoletor-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - interpoletor-network
+    restart: unless-stopped
+
+networks:
+  interpoletor-network:
+    driver: bridge
