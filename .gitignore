@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Data files (keep locally, not in repo)
+*.pkl
+*.npz
+
+# Docker / env
+.env
+.env.*
+docker-compose.override.yml
+
+# Docs
+docs/_build/
+
+# Python caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime artifacts
+data_uploads/
+model_latest.pt
+model_metadata.pkl
+
+# Datasets
+*.pkl
+
+# Frontend
+node_modules/
+.next/
+.env.local
+
+# Backend
+__pycache__/
+.pytest_cache/
+data_uploads/
+saved_models/
+*.pt
+*.pkl
