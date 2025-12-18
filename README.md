@@ -142,8 +142,8 @@ The system implements a custom PyTorch-based regressor (`FiveDRegressor`) suppor
 │  ┌──────────────▼─────────────────────────────────────────┐  │
 │  │           Core ML Pipeline (PyTorch)                   │  │
 │  │  ┌───────────┐  ┌────────────┐  ┌──────────────────┐   │  │
-│  │  │  Data     │→ │Preprocessing│→ │  FiveDRegressor │   │  │
-│  │  │  Loading  │  │  (sklearn)  │  │   (PyTorch NN)  │   │  │
+│  │  │  Data     │→│Preprocessing│→│FiveDRegressor     │.  │  │
+│  │  │  Loading  │  │           │   │     (PyTorch NN) │   │  │
 │  │  └───────────┘  └────────────┘  └──────────────────┘   │  │
 │  └────────────────────────────────────────────────────────┘  │
 │  Port: 8000  |  Container: interpoletor-backend              │
@@ -193,6 +193,57 @@ Network: interpoletor-network (bridge)
 | **Docker Compose** | Multi-container orchestration |
 
 ---
+
+## System Architecture and File Hierarchy
+
+```
+interpoletor/
+│
+├── backend/                        # Python backend service
+│   ├── fivedreg/                   # Core machine learning package
+│   │   ├── __init__.py
+│   │   ├── data.py                 # Data management and preprocessing
+│   │   ├── model.py                # FiveDRegressor implementation (PyTorch)
+│   │   └── utils.py                # Utility functions for persistence
+│   │
+│   ├── tests/                      # Comprehensive test suite
+│   │   ├── test_core.py            # Model unit tests
+│   │   ├── test_load.py            # Data pipeline tests
+│   │   ├── test_endpoints.py       # API integration tests
+│   │   ├── test_model_lifecycle.py # End-to-end operational tests
+│   │   └── test_backend_utils.py   # Utility verification
+│   │
+│   ├── main.py                     # FastAPI service entry point
+│   ├── pyproject.toml              # Python dependency specification
+│   ├── Dockerfile                  # Backend container configuration
+│   ├── .dockerignore               # Docker build exclusions
+│   ├── data_uploads/               # Runtime dataset storage
+│   ├── models/                     # Runtime model weight storage
+│   └── figures/                    # Runtime visualization output
+│
+├── frontend/                       # Next.js frontend service
+│   ├── src/
+│   │   └── app/
+│   │       ├── page.tsx            # Integrated single-page application
+│   │       ├── layout.tsx          # Application root layout
+│   │       └── globals.css         # Global style definitions
+│   │
+│   ├── public/                     # Static assets
+│   ├── package.json                # Node.js dependency specification
+│   ├── tsconfig.json               # TypeScript configuration
+│   ├── tailwind.config.js          # Styling theme configuration
+│   ├── next.config.js              # Next.js framework configuration
+│   ├── Dockerfile                  # Frontend container configuration
+│   ├── .dockerignore               # Docker build exclusions
+│   ├── .env.local                  # Local environment configuration
+│   └── README.md                   # Frontend-specific documentation
+│
+├── docker-compose.yml              # System orchestration configuration
+├── start-dev.sh                    # Development initialization script
+├── README.md                       # System overview documentation
+├── .gitignore                      # Workspace exclusions
+└── test_data/                      # Evaluation datasets
+```
 
 ## Code Documentation and Comments
 
@@ -806,11 +857,11 @@ PYTHONPATH=. pytest tests/test_load.py -v
 PYTHONPATH=. pytest tests/test_model_lifecycle.py -v
 ```
 
-### 📁 Where to Find Test Results
+### Results
 
 #### 1. **Terminal Output**
 After running tests, you'll see:
-- ✅ Pass/fail status for each test
+- Pass/fail status for each test
 - Percentage progress
 - Total time taken
 - Coverage summary
@@ -858,9 +909,9 @@ Displayed immediately after tests with:
 **Overall Coverage**: 🎯 **100.00%** (344 statements, 0 missing) - PERFECT!
 
 **Journey to Perfection**:
-- ✅ Original: 34 tests, 77.03% coverage
-- ✅ Enhanced: 54 tests, 88.66% coverage (+11.63%)
-- ✅ **Final: 74 tests, 100.00% coverage (+11.34%) - PERFECT SCORE! 🎉**
+- Original: 34 tests, 77.03% coverage
+- Enhanced: 54 tests, 88.66% coverage (+11.63%)
+- **Final: 74 tests, 100.00% coverage (+11.34%) - PERFECT SCORE! 🎉**
 
 ---
 
@@ -986,10 +1037,10 @@ PYTHONPATH=. python3 -m task8.run_task8 --quick
 | 10K samples  | 0.999    | 0.998  | 0.998   |
 
 **Key Observations**:
-- ✅ **Significant accuracy improvement** with more data: 10K samples achieve ~10× lower MSE than 1K
-- ✅ **Excellent R² scores** (>0.95) across all dataset sizes indicate strong model fit
-- ✅ **Low overfitting**: Train/validation/test metrics are consistent, showing good generalization
-- ✅ **Convergence**: Model benefits from larger datasets, approaching R² ≈ 0.999 at 10K samples
+- **Significant accuracy improvement** with more data: 10K samples achieve ~10× lower MSE than 1K
+- **Excellent R² scores** (>0.95) across all dataset sizes indicate strong model fit
+- **Low overfitting**: Train/validation/test metrics are consistent, showing good generalization
+- **Convergence**: Model benefits from larger datasets, approaching R² ≈ 0.999 at 10K samples
 
 #### 3. Memory Usage
 
@@ -1009,10 +1060,10 @@ PYTHONPATH=. python3 -m task8.run_task8 --quick
 - **Theoretical Optimizer Size**: 0.023 MB (23 KB, Adam optimizer)
 
 **Key Observations**:
-- ✅ **Extremely lightweight model**: Only 3K parameters makes it suitable for resource-constrained environments
-- ✅ **Low memory footprint**: Model itself requires <50 KB
-- ✅ **Efficient inference**: Minimal memory overhead during prediction
-- ✅ **Scalable architecture**: Can handle larger datasets without excessive memory consumption
+- **Extremely lightweight model**: Only 3K parameters makes it suitable for resource-constrained environments
+- **Low memory footprint**: Model itself requires <50 KB
+- **Efficient inference**: Minimal memory overhead during prediction
+- **Scalable architecture**: Can handle larger datasets without excessive memory consumption
 
 #### 4. Model Scalability
 
@@ -1028,7 +1079,7 @@ PYTHONPATH=. python3 -m task8.run_task8 --quick
 - For production: 5K-10K samples (12-23s training, R² > 0.99)
 - Architecture: Default (64, 32, 16) provides excellent balance of accuracy and speed
 
-### 📊 Experiment Details
+### Experiment Details
 
 For detailed analysis and visualizations, see:
 - JSON results in `backend/figures/*.json`
@@ -1116,190 +1167,6 @@ curl -X POST http://localhost:8000/predict \
   }'
 ```
 
----
-
-## System Architecture and File Hierarchy
-
-```
-interpoletor/
-│
-├── backend/                        # Python backend service
-│   ├── fivedreg/                   # Core machine learning package
-│   │   ├── __init__.py
-│   │   ├── data.py                 # Data management and preprocessing
-│   │   ├── model.py                # FiveDRegressor implementation (PyTorch)
-│   │   └── utils.py                # Utility functions for persistence
-│   │
-│   ├── tests/                      # Comprehensive test suite
-│   │   ├── test_core.py            # Model unit tests
-│   │   ├── test_load.py            # Data pipeline tests
-│   │   ├── test_endpoints.py       # API integration tests
-│   │   ├── test_model_lifecycle.py # End-to-end operational tests
-│   │   └── test_backend_utils.py   # Utility verification
-│   │
-│   ├── main.py                     # FastAPI service entry point
-│   ├── pyproject.toml              # Python dependency specification
-│   ├── Dockerfile                  # Backend container configuration
-│   ├── .dockerignore               # Docker build exclusions
-│   ├── data_uploads/               # Runtime dataset storage
-│   ├── models/                     # Runtime model weight storage
-│   └── figures/                    # Runtime visualization output
-│
-├── frontend/                       # Next.js frontend service
-│   ├── src/
-│   │   └── app/
-│   │       ├── page.tsx            # Integrated single-page application
-│   │       ├── layout.tsx          # Application root layout
-│   │       └── globals.css         # Global style definitions
-│   │
-│   ├── public/                     # Static assets
-│   ├── package.json                # Node.js dependency specification
-│   ├── tsconfig.json               # TypeScript configuration
-│   ├── tailwind.config.js          # Styling theme configuration
-│   ├── next.config.js              # Next.js framework configuration
-│   ├── Dockerfile                  # Frontend container configuration
-│   ├── .dockerignore               # Docker build exclusions
-│   ├── .env.local                  # Local environment configuration
-│   └── README.md                   # Frontend-specific documentation
-│
-├── docker-compose.yml              # System orchestration configuration
-├── start-dev.sh                    # Development initialization script
-├── README.md                       # System overview documentation
-├── .gitignore                      # Workspace exclusions
-└── test_data/                      # Evaluation datasets
-```
-
----
-
-## Troubleshooting
-
-### Backend Issues
-
-**Port 8000 in use:**
-```bash
-lsof -i :8000
-kill -9 <PID>
-```
-
-**Import errors:**
-```bash
-export PYTHONPATH=.
-cd backend && PYTHONPATH=. python3 main.py
-```
-
-**Model not loading:**
-```bash
-# Train a new model
-## Error Resolution and Troubleshooting
-
-### Backend Operational Issues
-
-**Port 8000 Conflict:**
-```bash
-lsof -i :8000
-kill -9 <PID>
-```
-
-**Module Resolution Errors:**
-```bash
-export PYTHONPATH=.
-cd backend && PYTHONPATH=. python3 main.py
-```
-
-**Model Initialization Failures:**
-```bash
-# Initialize a new training cycle
-curl -X POST http://localhost:8000/train \
-  -H "Content-Type: application/json" \
-  -d '{"hidden_layers": [64,32,16]}'
-```
-
-### Frontend Operational Issues
-
-**Port 3000 Conflict:**
-```bash
-lsof -i :3000
-kill -9 <PID>
-# Alternative: PORT=3001 npm run dev
-```
-
-**Backend Communication Failures:**
-```bash
-# Verify backend service availability
-curl http://localhost:8000/health
-
-# Inspect local environment configuration
-cat frontend/.env.local
-# Specification requirement: NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-### Docker Operational Issues
-
-**Build Failures:**
-```bash
-# Execute clean build procedure
-docker-compose build --no-cache
-
-# Manage system resources
-docker system df
-docker system prune -a
-```
-
-**Container Initialization Failures:**
-```bash
-docker-compose logs backend
-docker-compose logs frontend
-```
-
-**For exhaustive troubleshooting guidance, refer to**: [DEPLOYMENT.md](DEPLOYMENT.md)
-
----
-
-## Additional Documentation
-
-- **[DEPLOYMENT.md](DEPLOYMENT.md)**: Comprehensive deployment strategies, environment configuration, and production auditing protocols.
-- **[frontend/README.md](frontend/README.md)**: Frontend-specific implementation details.
-- **[FRONTEND_README.md](FRONTEND_README.md)**: Frontend initialization guide.
-- **[backend/pyproject.toml](backend/pyproject.toml)**: Dependency specification and package configuration.
-
----
-
-## Academic Context
-
-This project was developed for the Cambridge Computer Science Tripos as a comprehensive demonstration of:
-- Contemporary web engineering practices (FastAPI, Next.js, Docker).
-- Machine learning systems architecture (PyTorch, scikit-learn).
-- Software engineering methodologies (automated testing, CI/CD, documentation).
-- Full-stack system integration (RESTful APIs, reactive interfaces, containerization).
-
----
-
 ## License
 
 MIT License - Academic project for Cambridge University.
-
----
-
-## Author
-
-**Iuliia Vituigova**
-- Email: iv294@cam.ac.uk
-- Institution: Cambridge University
-- Course: Computer Science Tripos, Part I
-- Year: 2025
-
----
-
-## Acknowledgments
-
-Technologies and Frameworks utilized:
-- **PyTorch**: Neural network implementation and optimization.
-- **FastAPI**: Asynchronous web framework for high-performance APIs.
-- **Next.js**: React-based framework for optimized frontend delivery.
-- **Docker**: Containerization and environment orchestration.
-- **pytest**: Comprehensive testing and verification framework.
-
----
-
-**For detailed initialization instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)**
-**API documentation is accessible at http://localhost:8000/docs during runtime**
